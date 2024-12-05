@@ -116,7 +116,7 @@ def user_input_form():
     return pd.DataFrame([data])
 
 # Main Streamlit app
-st.title("Lung Cancer Outcome Predictor")
+st.title("Lung Cancer complication Predictor")
 st.write("Predicts `ctype_catl`, `ctypel`, and `comp_gap_category` based on patient data.")
 
 # Sidebar for user inputs
@@ -154,9 +154,9 @@ if st.button("Predict"):
 
         # Display predictions
         st.subheader("Predictions:")
-        st.write(f"**ctype_catl:** {ctype_catl_mapping[pred_catl[0]]}")
-        st.write(f"**ctypel:** {ctypel_mapping[pred_ctypel[0]]}")
-        st.write(f"**comp_gap_category:** {comp_gap_category_mapping[pred_gap[0]]}")
+        st.write(f"**Complication severity:** {ctype_catl_mapping[pred_catl[0]]}")
+        st.write(f"**Complication name:** {ctypel_mapping[pred_ctypel[0]]}")
+        st.write(f"**Complication Gap:** {comp_gap_category_mapping[pred_gap[0]]}")
 
         # Display top 3 ctypel predictions
         st.subheader("Top 3 Predictions for ctypel:")
