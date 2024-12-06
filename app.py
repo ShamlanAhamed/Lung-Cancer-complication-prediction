@@ -134,35 +134,36 @@ def preprocess_input(input_df, model):
 # Make predictions
 if st.button("Predict"):
     try:
-        # Predict for each model
-        input_processed_catl = preprocess_input(input_df, model_ctype_catl)
-        input_processed_ctypel = preprocess_input(input_df, model_ctypel)
-        input_processed_gap = preprocess_input(input_df, model_comp_gap_category)
+        # Check if Cigarette Years, Pack Years, and Lung Annual Years are all zero
+        if input_df["cig_years"].iloc[0] == 0 and input_df["pack_years"].iloc[0] == 0 and input_df["lung_annyr"].iloc[0] == 0:
+            st.warning("Not enough information to make predictions. Please provide additional details.")
+        else:
+            # Predict for each model
+            input_processed_catl = preprocess_input(input_df, model_ctype_catl)
+            input_processed_ctypel = preprocess_input(input_df, model_ctypel)
+            input_processed_gap = preprocess_input(input_df, model_comp_gap_category)
 
-        pred_catl = model_ctype_catl.predict(input_processed_catl)
-        pred_ctypel = model_ctypel.predict(input_processed_ctypel)
-        pred_gap = model_comp_gap_category.predict(input_processed_gap)
+            pred_catl = model_ctype_catl.predict(input_processed_catl)
+            pred_ctypel = model_ctypel.predict(input_processed_ctypel)
+            pred_gap = model_comp_gap_category.predict(input_processed_gap)
 
-        # Get probabilities for ctypel to find top 3 classes
-        pred_ctypel_proba = model_ctypel.predict_proba(input_processed_ctypel)[0]
-        top_3_indices = np.argsort(pred_ctypel_proba)[-5:][::-1]
+            # Get probabilities for ctypel to find top 3 classes
+            pred_ctypel_proba = model_ctypel.predict_proba(input_processed_ctypel)[0]
+            top_3_indices = np.argsort(pred_ctypel_proba)[-5:][::-1]
 
-         # Map indices to class names and get probabilities
-        top_3_classes_with_names = [(ctypel_mapping[idx], pred_ctypel_proba[idx]) for idx in top_3_indices]
+            # Map indices to class names and get probabilities
+            top_3_classes_with_names = [(ctypel_mapping[idx], pred_ctypel_proba[idx]) for idx in top_3_indices]
 
+            # Display predictions
+            st.subheader("Predictions:")
+            st.write(f"**Complication severity:** {ctype_catl_mapping[pred_catl[0]]}")
+            st.write(f"**Complication name:** {ctypel_mapping[pred_ctypel[0]]}")
+            st.write(f"**Complication Gap:** {comp_gap_category_mapping[pred_gap[0]]}")
 
-
-        # Display predictions
-        st.subheader("Predictions:")
-        st.write(f"**Complication severity:** {ctype_catl_mapping[pred_catl[0]]}")
-        st.write(f"**Complication name:** {ctypel_mapping[pred_ctypel[0]]}")
-        st.write(f"**Complication Gap:** {comp_gap_category_mapping[pred_gap[0]]}")
-
-        # Display top 3 ctypel predictions
-        st.subheader("Top 3 Predictions for ctypel:")
-        for i, (class_name, probability) in enumerate(top_3_classes_with_names, start=1):
-            st.write(f"{i}. {class_name}: {probability * 100:.2f}%")
-
+            # Display top 3 ctypel predictions
+            st.subheader("Top 3 Predictions for ctypel:")
+            for i, (class_name, probability) in enumerate(top_3_classes_with_names, start=1):
+                st.write(f"{i}. {class_name}: {probability * 100:.2f}%")
     except Exception as e:
         st.error(f"Error during prediction: {e}")
 
