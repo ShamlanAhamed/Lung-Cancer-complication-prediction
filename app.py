@@ -44,11 +44,11 @@ def user_input_form():
     lung_cancer_type = st.sidebar.selectbox("Lung Cancer Type", ["Non-Small Cell Lung Cancer", "Small Cell Lung Cancer"])
     lung_grade = st.sidebar.selectbox("Lung Grade", [
         "Well differentiated; Grade I", "Moderately differentiated; Grade II",
-        "Poorly differentiated; Grade III", "Undifferentiated; Grade IV"
+        "Poorly differentiated; Grade III", "Undifferentiated; Grade IV", "T cell; T precursor", "Unknown"
     ])
     lung_histtype = st.sidebar.selectbox("Lung Histological Type", [
         "Squamous Cell Carcinoma", "Spindle Cell Carcinoma", "Small Cell Carcinoma", 
-        "Intermediate Cell Carcinoma", "Adenocarcinoma", "Large Cell Carcinoma"
+        "Intermediate Cell Carcinoma", "Adenocarcinoma", "Large Cell Carcinoma", "Other NSC carcinoma" ,"Carcinoma, NOS", "Other/Missing"
     ])
     lung_cancer_first = st.sidebar.selectbox("First Lung Cancer Diagnosis", ["No", "Yes"])
     lung_annyr = st.sidebar.number_input("Lung Annual Years", min_value=0.0, value=0.0)
